@@ -1,0 +1,24 @@
+services:
+  grafana-otel:
+    image: grafana/otel-lgtm
+    network_mode: host
+    ports:
+      - "4317:4317" # OTLP gRPC
+      - "4318:4318" # OTLP HTTP
+      - "3000:3000" # Grafana UI
+    environment:
+      - ENABLE_LOGS_TEMPO=true
+      - OTEL_METRIC_EXPORT_INTERVAL=500
+      - GF_PATHS_DATA=/data/grafana
+    volumes:
+      - grafana:/data/grafana
+      - prometheus:/data/prometheus
+      - loki:/data/loki
+
+volumes:
+  grafana:
+    driver: local
+  loki:
+    driver: local
+  prometheus:
+    driver: local
